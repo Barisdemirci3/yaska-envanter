@@ -1,7 +1,11 @@
 <?php 
 include "classes/include.php";
 $database = new DatabaseClass;
-$database->CheckKullanici("barisdemirci","barisbaba3");
+session_start();
+ob_start();
+if($_SESSION){
+   header("Location: index.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,18 +55,19 @@ $database->CheckKullanici("barisdemirci","barisbaba3");
                      <h2 style="color: white; font-size: 32pt; font-family:Arial, Helvetica, sans-serif;">Yaska Group <br> <br> Çalışan paneli girişi</h2>
                   </div>
                </div>
-               <form style="padding: 40px;">
+               <form id="loginform" style="padding: 40px;" onsubmit="return false;">
                   <div class="form-group">
                      <label for="exampleInputEmail1">Kullanıcı adı</label>
-                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Kullanıcı Adı">
-                     <small id="emailHelp" class="form-text text-muted">Size verilen kullanıcı adını giriniz.</small>
+                     <input type="text" class="form-control" id="loginNick" placeholder="Kullanıcı Adı">
+                     <small id="login" class="form-text text-muted">Size verilen kullanıcı adını yazınız</small>
                   </div>
                   <div class="form-group">
                      <label for="exampleInputPassword1">Şifre</label>
-                     <input type="password" id="password" class="form-control" id="exampleInputPassword1" placeholder="Şifre">
+                     <input type="password"  id="loginPassword" class="form-control" id="passwordlogin" placeholder="Şifre">
+                     <small id="login" class="form-text text-muted">Size verilen şifreyi yazınız</small>
                      <button type="button" id="showpasswordbutton" class="btn btn-primary" style="float: right; margin-top:12px;"><i class="fa fa-eye" aria-hidden="true"></i></button> <br><br><br>
                   </div>
-                  <button style="float: right;" type="button" class="btn btn-primary">Giriş Yap</button>
+                  <button style="float: right;" type="submit" class="btn btn-primary">Giriş Yap</button>
                </form>
             </div>
          </div>
@@ -71,9 +76,10 @@ $database->CheckKullanici("barisdemirci","barisbaba3");
    </div>
    <!-- jQuery -->
    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-   <script src="js/jquery.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <script src="js/popper.min.js"></script>
    <script src="js/bootstrap.min.js"></script>
+   <script src="js/check.js"></script>
    <!-- wow animation -->
    <script src="js/animate.js"></script>
    <!-- select country -->
@@ -86,6 +92,7 @@ $database->CheckKullanici("barisdemirci","barisbaba3");
    <!-- custom js -->
    <script src="js/custom.js"></script>
    <script src="js/project.js"></script>
+   
 </body>
 
 </html>

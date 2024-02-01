@@ -10,18 +10,7 @@
 /*--------------------------------------
 	sidebar
 --------------------------------------*/
-$("#showpasswordbutton").click(function (e) { 
-  var ButtonID = document.getElementById("showpasswordbutton");
-  var PasswordID = document.getElementById("password");
-  if(PasswordID.type == "password"){
-      PasswordID.type = "text";
-      ButtonID.innerHTML = '<i class="fa fa-eye-slash" aria-hidden="true"></i>'
-  }
-  else{
-      PasswordID.type = "password";
-      ButtonID.innerHTML = '<i class="fa fa-eye" aria-hidden="true"></i>'
-  }
-});
+
 
 
 

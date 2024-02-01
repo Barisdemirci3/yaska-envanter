@@ -3,3 +3,10 @@
 -------------------------------------------------------------------*/
 
 /** ADD YOUR AWESOME CODES HERE **/
+.purple-button{
+    background-color: #666cff;
+}
+.purple-button:hover{
+    background-color: #4146d9;
+    transition: 1.3s;
+}
