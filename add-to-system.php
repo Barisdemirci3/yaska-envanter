@@ -24,7 +24,7 @@
             <!-- row -->
 
             <!-- 2 column grid layout with text inputs for the first and last names -->
-            <form id="user_add_form" onsubmit="return false;">
+            <form id="user_add_form" onsubmit="return false;" enctype="multipart/form-data" >
               <div class="row mb-4">
                 <div class="col">
                   <div data-mdb-input-init class="form-outline">
@@ -59,6 +59,11 @@
                   <option value="2">Admin</option>
                 </select>
                 <label class="form-label" for="form6Example6">Rolü - <code>Zorunlu</code></label>
+              </div>
+
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input type="file" id="file" class="form-control" />
+                <label class="form-label" for="form6Example6">Profil Fotoğrafı - <code>Zorunlu Değil</code></label>
               </div>
 
 

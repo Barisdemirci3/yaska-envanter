@@ -4,6 +4,7 @@
   include "resources/topbar.php";
 require_once("classes/include.php");
 $createClass = new DatabaseClass;
+$createDashboardClass = new DashboardClass;
   session_start();
   ?>
   <body class="dashboard dashboard_1">
@@ -34,7 +35,7 @@ $createClass = new DatabaseClass;
                                                 <span>
                                                 <span class="name_user"><?= $write_duyuru["duyuru_text"]; ?></span>
 
-                                                <span class="time_ago"><?= $write_duyuru["duyuru_date"]; ?></span>
+                                                <span class="time_ago"> <?= DateFormater($write_duyuru["duyuru_date"]);  ?></span>
                                                 </span>
                                              </li>
                                           </ul>
@@ -44,7 +45,23 @@ $createClass = new DatabaseClass;
                               </div>
                            </div>
                      <div class="row column1">
-                        <div class="col-md-6 col-lg-3">
+                     <div class="col-md-6 col-lg-3 p-2">
+                           <div class="full counter_section margin_bottom_30">
+                              <div class="couter_icon">
+                                 <div> 
+                                 <i class="fa-solid fa-user-tie" style="color: black"></i>
+                                 </div>
+                              </div>
+                              <div class="counter_no">
+                                 <div>
+                                    <p class="total_no"><?= $createDashboardClass->GetSystemUserCount(); ?></p>
+                                    <p class="head_couter">Sistem Kullanıcısı Sayısı</p>
+                                 </div>
+                              </div>
+
+                           </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 p-2">
                            <div class="full counter_section margin_bottom_30">
                               <div class="couter_icon">
                                  <div> 
@@ -59,7 +76,7 @@ $createClass = new DatabaseClass;
                               </div>
                            </div>
                         </div>
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6 col-lg-3 p-2">
                            <div class="full counter_section margin_bottom_30">
                               <div class="couter_icon">
                                  <div> 
@@ -68,28 +85,14 @@ $createClass = new DatabaseClass;
                               </div>
                               <div class="counter_no">
                                  <div>
-                                    <p class="total_no">Buraya</p>
-                                    <p class="head_couter">Toplam Laptop Sayısı</p>
+                                    <p class="total_no"><?= $createDashboardClass->GetObjectCount(); ?></p>
+                                    <p class="head_couter">Toplam Cihaz Sayısı</p>
                                  </div>
                               </div>
+                              
                            </div>
                         </div>
-                        <div class="col-md-6 col-lg-3">
-                           <div class="full counter_section margin_bottom_30">
-                              <div class="couter_icon">
-                                 <div> 
-                                    <i class="fa fa-cloud-download green_color"></i>
-                                 </div>
-                              </div>
-                              <div class="counter_no">
-                                 <div>
-                                    <p class="total_no">Buraya</p>
-                                    <p class="head_couter">Aktif Talep Sayısı</p>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6 col-lg-3 p-2">
                            <div class="full counter_section margin_bottom_30">
                               <div class="couter_icon">
                                  <div> 

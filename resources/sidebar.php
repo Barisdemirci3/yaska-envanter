@@ -20,10 +20,10 @@ $datas = $ClassVariable->GetUserProperties($_SESSION["nick"]);
                   <div class="sidebar_user_info">
                      <div class="icon_setting"></div>
                      <div class="user_profle_side">
-                        <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
+                        <div class="user_img"><img class="img-responsive" src="<?= $datas["sistem_k_profil"] ?>" alt="#" /></div>
                         <div class="user_info">
                            <h6>Hoşgeldiniz</h6>
-                           <p><?php echo $datas["sistem_k_isim"]." ".$datas["sistem_k_soyisim"]; ?></p>
+                           <p><?php echo CharUpper($datas["sistem_k_isim"])." ". CharUpper($datas["sistem_k_soyisim"]) ?></p>
                            <p style="color: white; opacity: 100%; font-size: 10pt">Yetkiniz: <span style="opacity: 100%"><?= $ClassVariable->SystemRole($datas["sistem_k_rol"]) ?> </span></p>
                         </div>
                      </div>
@@ -38,13 +38,13 @@ $datas = $ClassVariable->GetUserProperties($_SESSION["nick"]);
                      <li><a href="add-personel.php"><i style="color: white" class="fa-solid fa-user-plus"></i> <span>Personel Ekle</span></a></li>
                      <li><a href="add-to-system.php"><i style="color: white" class="fa-solid fa-user-plus"></i> <span>Sisteme Kullanıcı Ekle</span></a></li>
                      <li><a href="add-category.php"><i class="fa-solid fa-list" style="color: white;"></i> <span>Kategori Ekle</span></a></li>
-                     <li><a href="add-status-for-object.php"><i class="fa-solid fa-list" style="color: white;"></i> <span>Durum Ekle</span></a></li>
+                     <li><a href="add-status-for-object.php"><i class="fa-solid fa-briefcase-medical"></i> <span>Durum Ekle</span></a></li>
                      <li><a href="add-object.php"><i class="fa-solid fa-computer" style="color: white;"></i> <span>Cihaz Ekle</span></a></li>
                      <li><a href="add-role.php"><i class="fa-solid fa-pen-to-square" style="color: white;"></i> <span>Personel Rolü Ekle</span></a></li>
-                     <li><a href="add-broadcast.php"><i class="fa-solid fa-bell" style="color: white;"></i> <span>Duyuru Ekle</span></a></li>
+                     <li><a href="add-broadcast.php"><i class="fa-solid fa-bell" style="color: white;"></i> <span>Duyuru Güncelle</span></a></li>
                      <li><a href="category-list.php"><i class="fa-solid fa-table" style="color: white;"></i> <span>Kategorileri Listele</span></a></li>
                      <li><a href="status-list.php"><i class="fa-solid fa-table" style="color: white;"></i> <span>Durumları Listele</span></a></li>
-                     <li><a href="add-category.php"><i class="fa-solid fa-table" style="color: white;"></i><span>Eşyaları Listele</span></a></li>
+                     <li><a href="objects.php"><i class="fa-solid fa-table" style="color: white;"></i><span>Cihazları Listele</span></a></li>
                      <li><a href="rols.php"><i class="fa-solid fa-table" style="color: white;"></i><span>Rolleri Listele</span></a></li>
                      <li><a href="system-user.php"><i class="fa-solid fa-table" style="color: white;"></i> <span>Sistem kullanıcılarını listele</span></a></li>
                      <li><a href="users.php"><i class="fa-solid fa-table" style="color: white;"></i> <span>Personelleri listele</span></a></li>

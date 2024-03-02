@@ -1,3 +1,8 @@
+function formatDate(dateString) {
+    let date = new Date(dateString);
+    let options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    return date.toLocaleDateString('tr-TR', options).replace(/\./g, '-');
+}
 function getdata(data) {
     return $("#"+data).val().trim();
   }
@@ -31,6 +36,21 @@ function warning(string) {
 $("#personel_add_form").submit(function () {
     var array = [$("#isim").val().trim(), $("#soyisim").val().trim(), $("#callintech_mail").val().trim(), $("#callintech_sifre").val().trim(), $("#mail_sender_nick").val().trim(), $("#mail_sender_sifre").val().trim(), $("#slack_mail").val().trim(), $("#rol").val().trim()];
     var jsonarray = JSON.stringify(array);
+    if(array[2] == ""){
+        array[2] = null;
+    }
+   else if(array[2] == ""){
+        array[2] = null;
+    }
+   else if(array[3] == ""){
+        array[3] = null;
+    }
+   else if(array[4] == ""){
+        array[4] = null;
+    }
+   else if(array[5] == ""){
+        array[5] = null;
+    }
     if (array[0] != "" && array[1] != "" && array[6] != "" && array[7] != "") {
         $.ajax({
             type: "POST",
@@ -41,43 +61,24 @@ $("#personel_add_form").submit(function () {
               if(response.personel_basarili){
                 success(response.personel_basarili);
               }
+              if(response.yetki_error){
+                json_parse = JSON.parse(response.yetki_error);
+                Swal.fire({
+                    title: "Yetki Hatası",
+                    icon: "error",
+                    confirmButtonText: "Tamam",
+                    confirmButtonColor: "green", 
+                    html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                });
+              }
             }
         });
     } else {
         error("Lütfen zorunlu olması gereken yerleri doldurunuz!");
     }
 });
-$("#user_add_form").submit(function (e) {
-    var inputs = [$("#name").val().trim(), $("#surname").val().trim(), $("#nickname").val().trim(), $("#password").val().trim(), $("#rol").val().trim()];
-    for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i] == "") {
-            error("Lütfen Tüm Alanları Doldurunuz!");
-            return false;
-        }
-
-    }
-    var jsonarray = JSON.stringify(inputs);
-    jQuery.ajax({
-        type: "POST",
-        url: "control/get.php",
-        data: { datalar: jsonarray },
-        dataType: "JSON",
-        success: function (response) {
-            if (response.basarili_geldi) {
-                success(response.basarili_geldi);
-                setTimeout(() => {
-                    window.window.location.href = 'system-user.php';
-                }, 1500);
-                
-            }
-            if (response.this_user_already) {
-                error(response.this_user_already);
-            }
-        },
-    });
 
 
-});
 $("#loginform").submit(function (e) {
     var inputArrays = [$("#loginNick").val().trim(), $("#loginPassword").val().trim()];
     for (let i = 0; i < inputArrays.length; i++) {
@@ -89,7 +90,7 @@ $("#loginform").submit(function (e) {
     jQuery.ajax({
         type: "POST",
         url: "control/get.php",
-        data: { nickname: inputArrays[0], password: inputArrays[1] },
+        data: { login_nickname: inputArrays[0], login_password: inputArrays[1] },
         dataType: "JSON",
         success: function (response) {
             if (response.login_error_kullanici_yok) {
@@ -158,7 +159,7 @@ $("#category_add_form").submit(function (e) {
     }else{
         $.ajax({
             type: "POST",
-            url: "control/get.php",
+            url: "./control/get.php",
             data: {kategori_isim},
             dataType: "JSON",
             success: function (response) {
@@ -167,6 +168,16 @@ $("#category_add_form").submit(function (e) {
                 }
                 if(response.category_already_added){
                     error(response.category_already_added);
+                }
+                if(response.yetki_error){
+                    json_parse =  JSON.parse(response.yetki_error);
+                    Swal.fire({
+                        title: "Yetki Hatası",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green", 
+                        html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                    });   
                 }
             }
         });
@@ -188,6 +199,16 @@ $("#status_add_form").submit(function (e) {
                 }
                 if(response.status_already_added){
                     error(response.status_already_added);
+                }
+                if(response.yetki_error){
+                    json_parse =  JSON.parse(response.yetki_error);
+                    Swal.fire({
+                        title: "Yetki Hatası",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green", 
+                        html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                    });   
                 }
             }
         });
@@ -213,6 +234,16 @@ $('.delete-button').click(function (e) {
                 }
                 if(response.kategori_silme_basarisiz){
                     error(response.kategori_silme_basarisiz);
+                }
+                if(response.yetki_error){
+                    json_parse =  JSON.parse(response.yetki_error);
+                    Swal.fire({
+                        title: "Yetki Hatası",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green", 
+                        html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                    });   
                 }
             }
         });
@@ -241,6 +272,16 @@ $("#rol_add_form").submit(function () {
              if(response.alreadyRoleData){
                 error(response.alreadyRoleData);
              }   
+             if(response.yetki_error){
+                json_parse =  JSON.parse(response.yetki_error);
+                Swal.fire({
+                    title: "Yetki Hatası",
+                    icon: "error",
+                    confirmButtonText: "Tamam",
+                    confirmButtonColor: "green", 
+                    html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                });   
+            }
             }
         });
     }
@@ -269,6 +310,16 @@ $(".delete-button-rol").click(function(){
                     if(response.no_role){
                         error(response.no_role);
                     }
+                    if(response.yetki_error){
+                        json_parse =  JSON.parse(response.yetki_error);
+                        Swal.fire({
+                            title: "Yetki Hatası",
+                            icon: "error",
+                            confirmButtonText: "Tamam",
+                            confirmButtonColor: "green", 
+                            html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                        });   
+                    }
             }
         });
     }
@@ -287,22 +338,31 @@ $(".delete-system-user").click(function(){
             data: {system_user_id},
             dataType: "JSON",
             success: function (response) {
-                    if(response.rol_success_deleted){
-                        success(response.rol_success_deleted);
+                    if(response.feedback_success){
+                        success(response.feedback_success);
                         setTimeout(() => {
                             location.reload();
                         }, 1000);
-                    }if(response.rol_error_deleted){
-                        error(response.rol_error_deleted);
                     }
-                    if(response.no_role){
-                        error(response.no_role);
+                    if(response.feedback_error){
+                        error(response.feedback_error);
+                    }
+                    if(response.yetki_error){
+                        json_parse =  JSON.parse(response.yetki_error);
+                        Swal.fire({
+                            title: "Yetki Hatası",
+                            icon: "error",
+                            confirmButtonText: "Tamam",
+                            confirmButtonColor: "green", 
+                            html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`,
+                        });   
                     }
             }
         });
     }
     
 });
+
 $("button[name='review']").click(function (e) {
     var reviewid = $(this).attr("data-id");
     if (!Number.isInteger(reviewid)) {
@@ -315,6 +375,7 @@ $("button[name='review']").click(function (e) {
             success: function (response) {
                 if (response.reviewbasarili) {
                     var personelOzellikleri = response.reviewbasarili[0];
+                    let formattedDate = formatDate(personelOzellikleri.kullanici_eklenme_tarihi);
                     Swal.fire({
                         title: 'Kullanıcı Bilgileri',
                         html: `
@@ -324,7 +385,7 @@ $("button[name='review']").click(function (e) {
                         <p style="font-size:14pt"><b>Mail sender şifre:</b> <span id="MailPassword">${personelOzellikleri.kullanici_mailsender_sifre}</span> <button name="copyButton" data-target="#MailPassword" title="Kopyala" class="btn btn-primary"><i class="fa-solid fa-clipboard"></i></button></p>
                         <p style="font-size:14pt"><b>Slack Mail:</b> <span id="SlackMail">${personelOzellikleri.kullanici_slack_mail}</span> <button name="copyButton" data-target="#SlackMail" title="Kopyala" class="btn btn-primary"><i class="fa-solid fa-clipboard"></i></button></p>
                         <p style="font-size:14pt"><b>Kullanıcı Rolü:</b> ${personelOzellikleri.kullanici_rol}</p>
-                        <p style="font-size:14pt"><b>Eklenme Tarihi:</b> ${personelOzellikleri.kullanici_eklenme_tarihi}</p>
+                        <p style="font-size:14pt"><b>Eklenme Tarihi:</b> ${formattedDate}</p>
                     `,
                         showConfirmButton: true,
                         confirmButtonText: "Tamam",
@@ -371,6 +432,16 @@ $("button[name='delete-personel'").click(function (e) {
                 if(response.personel_delete_error){
                     error(response.personel_delete_error);
                 }
+                if(response.yetki_error){
+                    json_parse =  JSON.parse(response.yetki_error);
+                    Swal.fire({
+                        title: "Yetki Hatası",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green", 
+                        html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                    });   
+                }
             }
         });
     }
@@ -393,6 +464,16 @@ $("#duyuru").submit(function (e) {
             }
             if(response.duyuru_error){
                 success(response.duyuru_error);
+            }
+            if(response.yetki_error){
+               json_parse =  JSON.parse(response.yetki_error);
+                Swal.fire({
+                    title: "Yetki Hatası",
+                    icon: "error",
+                    confirmButtonText: "Tamam",
+                    confirmButtonColor: "green", 
+                    html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                });   
             }
         }
     });
@@ -418,12 +499,195 @@ $("#object_add_form").submit(function (e) {
         data: {Object_Properties_Array},
         dataType: "JSON",
         success: function (response) {
-            if(response.object_basarili){
-                success(response.object_basarili);
+            if(response.object_success_added){
+                success(response.object_success_added);
+            }
+            if(response.object_error){
+                error(response.object_error);
+            }
+            if(response.object_id_empty){
+                error(response.object_id_empty);
+            }
+            if(response.yetki_error){
+                json_parse =  JSON.parse(response.yetki_error);
+                Swal.fire({
+                    title: "Yetki Hatası",
+                    icon: "error",
+                    confirmButtonText: "Tamam",
+                    confirmButtonColor: "green", 
+                    html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                });   
             }
         }
     });
 });
+$("button[name='sil-status']").click(function(button_value){
+    button_value = $(this).attr("data-id");
+    button_value = Number.parseInt(button_value);
+    if(button_value == "" || button_value == null || !Number.isInteger(button_value)){
+        console.error("Gelen data hatalı!");
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "./control/get.php",
+            data: {button_value},
+            dataType: "JSON",
+            success: function (response) {
+                   if(response.durum_silme_basarili){
+                    success(response.durum_silme_basarili);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                   }
+                   if(response.button_value_empty){
+                    error(response.button_value_empty);
+                   }
+                   if(response.durum_silme_basarisiz){
+                    error(response.durum_silme_basarisiz);
+                   }
+                   if(response.yetki_error){
+                    json_parse =  JSON.parse(response.yetki_error);
+                    Swal.fire({
+                        title: "Yetki Hatası",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green", 
+                        html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                    });   
+                }
+            }
+        });
+    }
+});
+$("button[name='review-object']").click(function (button_value_object) { 
+    button_value_object = $(this).attr("data-id");
+    button_value_object = Number.parseInt(button_value_object);
+    if(button_value_object == "" || button_value_object == null || !Number.isInteger(button_value_object)){
+        console.error("Gelen data hatalı!");
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "./control/get.php",
+            data: {button_value_object},
+            dataType: "JSON",
+            success: function (response) {
+                if(response.object_review_success){
+                    var object_properties = response.object_review_success;
+                    for (let index = 0; index < object_properties.length; index++) {
+                        if(object_properties[index]== null || object_properties[index] == ""){
+                            object_properties[index] = "Bilinmiyor!";
+                        }
+                    }
+                    Swal.fire({
+                        title: 'Cihaz Bilgileri',
+                        html: `
+                        <p style="font-size:14pt; color: green;"><b>Cihaz Kategori:</b> ${object_properties.esya_kategori_name}</p>
+                        <p style="font-size:14pt"><b>Cihaz Açıklama:</b> ${object_properties.esya_aciklama}</p>
+                        <p style="font-size:14pt;color: red;"><b>Cihaz Durum:</b> ${object_properties.esya_durum_name}</p>
+                        <p style="font-size:14pt; color:blue;"><b>Cihaz Ekleyen Kişi:</b> ${object_properties.esya_ekleyen_nickname}</p>
+                        <p style="font-size:14pt"><b>Cihaz Eklenme Tarihi:</b> ${formatDate(object_properties.esya_eklenme_tarih)}</p>
+                    `,
+                        showConfirmButton: true,
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green"
+                    });
+                }
+                if(response.object_review_error){
+                    error(response.object_review_error);
+                }
+                if(response.button_object_value_empty){
+                    error(response.button_object_value_empty);
+                }
+            }
+        });
+    }
+});
 
+$("button[name='delete-object']").click(function (button_delete_id) { 
+    button_delete_id = $(this).attr("data-id");
+    button_delete_id = Number.parseInt(button_delete_id);
+    if(button_delete_id == "" || button_delete_id == null){
+        console.error("Gelen data hatalı!");
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "./control/get.php",
+            data: {button_delete_id},
+            dataType: "JSON",
+            success: function (response) {
+                if(response.object_delete_success){
+                    success(response.object_delete_success);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+                if(response.object_delete_error){
+                    error(response.object_delete_error);
+                }
+                if(response.yetki_error){
+                    json_parse =  JSON.parse(response.yetki_error);
+                    Swal.fire({
+                        title: "Yetki Hatası",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green", 
+                        html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                    });   
+                }
+            }
+        });
+    }
+});
 
-  
+$("#user_add_form").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(this); // 'this' form elementini işaret eder
+    formData.append('name', $("#name").val().trim());
+    formData.append('surname', $("#surname").val().trim());
+    formData.append('nickname', $("#nickname").val().trim());
+    formData.append('password', $("#password").val().trim());
+    formData.append('rol', $("#rol").val().trim());
+    // Eğer dosya inputunuzun id'si file ise
+    var fileInput = $('#file')[0].files[0]; // 'file' id'li inputtan dosyayı alın
+    formData.append('file', fileInput); // Dosyayı FormData'ya ekleyin
+
+    // Tüm alanları doldurulup doldurulmadığını kontrol et
+    var emptyInputs = Array.from(formData.values()).some(val => val === "");
+    if (emptyInputs) {
+        error("Lütfen Tüm Alanları Doldurunuz!");
+        return false;
+    }
+    jQuery.ajax({
+        type: "POST",
+        url: "control/get.php",
+        data: formData,
+        dataType: "JSON",
+        contentType: false, // İçerik tipinin otomatik olarak ayarlanmasını engelleyin
+        processData: false, // FormData nesnesini düz metne dönüştürmeyi engelleyin
+        success: function (response) {
+            if (response.basarili_geldi) {
+                success(response.basarili_geldi);
+                setTimeout(() => {
+                    window.location.href = 'system-user.php';
+                }, 2000);
+                
+            }
+            if (response.this_user_already) {
+                error(response.this_user_already);
+            }
+            if(response.image_error){
+                error(response.image_error);
+            }
+            if(response.yetki_error){
+                json_parse =  JSON.parse(response.yetki_error);
+                Swal.fire({
+                    title: "Yetki Hatası",
+                    icon: "error",
+                    confirmButtonText: "Tamam",
+                    confirmButtonColor: "green", 
+                    html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                });   
+            }
+        },
+    });
+});

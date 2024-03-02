@@ -39,7 +39,7 @@
                   <tr>
                     <th  scope="row"><?= $row["durum_id"]; ?></th>
                     <td><?= $row["durum_isim"]; ?></td>
-                    <td><button title="Düzenle" class="btn purple-button"  ><i class="fa-solid fa-pen-to-square"></i></button> <button data-id="<?= $row["durum_id"] ?>" title="Sil" name="sil" id="sil" class="btn btn-danger delete-button"><i class="fa-solid fa-trash"></i></button></td>
+                    <td><button title="Düzenle" class="btn purple-button"  ><i class="fa-solid fa-pen-to-square"></i></button> <button data-id="<?= $row["durum_id"] ?>" title="Sil" name="sil-status" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button></td>
                   </tr>
                 <?php } ?>
               </tbody>

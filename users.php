@@ -21,7 +21,7 @@
             <div class="row column_title">
               <div class="col-md-12">
                 <div class="page_title">
-                  <h2>Sistem Kullanıcıları Listesi</h2>
+                  <h2>Personeller Listesi</h2>
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
                   <tr>
                     <th  scope="row"><?= $row["kullanici_id"] ?></th>
                     <td><span><?= $row["kullanici_isim"]." ".$row["kullanici_soyisim"] ?></span></td>
-                    <td><span><button data-id="<?= $row["kullanici_id"]; ?>" name="review" title="İncele" class="btn purple-button" ><i class="fa-solid fa-magnifying-glass"></i></button> <button class="btn" name="delete-personel" data-id="<?= $row["kullanici_id"]; ?>" < style="background-color: #F31212" title="Sil"><i class="fa-solid fa-trash"></i></button></span></td>
+                    <td><span><button data-id="<?= $row["kullanici_id"]; ?>" name="review" title="İncele" class="btn purple-button"><i class="fa-solid fa-magnifying-glass"></i></button> <button class="btn" name="delete-personel" data-id="<?= $row["kullanici_id"]; ?>" < style="background-color: #F31212" title="Sil"><i class="fa-solid fa-trash"></i></button></span></td>
                     
                   </tr>
                 <?php } ?>

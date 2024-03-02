@@ -9,7 +9,10 @@
       <!-- right content -->
       <div id="content">
         <!-- topbar -->
-        <?php require_once("resources/topbar.php"); ?>
+        <?php require_once("resources/topbar.php"); 
+        $databaseclass = new DatabaseClass;
+        $writerols = $databaseclass->GetRols();
+        ?>
         <!-- end topbar -->
         <!-- dashboard inner -->
         <div class="midde_cont">
@@ -71,13 +74,12 @@
 
               <div data-mdb-input-init class="form-outline mb-4">
                 <select name="rol" id="rol" class="form-control">
-                  <option value=""></option>
-                  <option value="3">asdsa</option>
-                  <option value=""></option>
+                <?php foreach ($writerols as $row) { ?>
+                  <option value="<?= $row["rol_id"] ?>"><?= $row["rol_name"] ?></option>
+                  <?php } ?>
                 </select>
                 <label class="form-label" for="form6Example6">Rolü - <code>Zorunlu</code></label>
               </div>
-
 
               <button type="submit" class="btn btn-success btn-block mb-4" style="padding: 15px;">Personeli Kaydet</button>
             </form>
