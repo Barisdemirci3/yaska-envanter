@@ -2,6 +2,10 @@
   include "resources/header.php";
   include "resources/sidebar.php";
   include "resources/topbar.php";
+require_once("classes/include.php");
+$createClass = new DatabaseClass;
+$createDashboardClass = new DashboardClass;
+  session_start();
   ?>
   <body class="dashboard dashboard_1">
       <div class="full_container">
@@ -16,8 +20,48 @@
                            </div>
                         </div>
                      </div>
+                    <div class="white_shd full margin_bottom_30  ">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>Duyuru</h2>
+                                 </div>
+                              </div>
+                              <div class="full progress_bar_inner">
+                                    <div class="col-md-12">
+                                       <div class="msg_list_main">
+                                          <ul class="msg_list">
+                                             <li>
+                                                <?php $write_duyuru= $createClass->GetUpdateText(); ?>
+                                                <span>
+                                                <span class="name_user"><?= $write_duyuru["duyuru_text"]; ?></span>
+
+                                                <span class="time_ago"> <?= DateFormater($write_duyuru["duyuru_date"]);  ?></span>
+                                                </span>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
                      <div class="row column1">
-                        <div class="col-md-6 col-lg-3">
+                     <div class="col-md-6 col-lg-3 p-2">
+                           <div class="full counter_section margin_bottom_30">
+                              <div class="couter_icon">
+                                 <div> 
+                                 <i class="fa-solid fa-user-tie" style="color: black"></i>
+                                 </div>
+                              </div>
+                              <div class="counter_no">
+                                 <div>
+                                    <p class="total_no"><?= $createDashboardClass->GetSystemUserCount(); ?></p>
+                                    <p class="head_couter">Sistem Kullanıcısı Sayısı</p>
+                                 </div>
+                              </div>
+
+                           </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 p-2">
                            <div class="full counter_section margin_bottom_30">
                               <div class="couter_icon">
                                  <div> 
@@ -26,13 +70,13 @@
                               </div>
                               <div class="counter_no">
                                  <div>
-                                    <p class="total_no">Buraya</p>
+                                    <p class="total_no"><?= $createClass->GetPersonel(1); ?></p>
                                     <p class="head_couter">Personel Sayısı</p>
                                  </div>
                               </div>
                            </div>
                         </div>
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6 col-lg-3 p-2">
                            <div class="full counter_section margin_bottom_30">
                               <div class="couter_icon">
                                  <div> 
@@ -41,28 +85,14 @@
                               </div>
                               <div class="counter_no">
                                  <div>
-                                    <p class="total_no">Buraya</p>
-                                    <p class="head_couter">Toplam Laptop Sayısı</p>
+                                    <p class="total_no"><?= $createDashboardClass->GetObjectCount(); ?></p>
+                                    <p class="head_couter">Toplam Cihaz Sayısı</p>
                                  </div>
                               </div>
+                              
                            </div>
                         </div>
-                        <div class="col-md-6 col-lg-3">
-                           <div class="full counter_section margin_bottom_30">
-                              <div class="couter_icon">
-                                 <div> 
-                                    <i class="fa fa-cloud-download green_color"></i>
-                                 </div>
-                              </div>
-                              <div class="counter_no">
-                                 <div>
-                                    <p class="total_no">Buraya</p>
-                                    <p class="head_couter">Aktif Talep Sayısı</p>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6 col-lg-3 p-2">
                            <div class="full counter_section margin_bottom_30">
                               <div class="couter_icon">
                                  <div> 
@@ -110,30 +140,6 @@
                            </div>
                         </div>
                      <div class="col-md-12">
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-                                    <h2>Duyurular</h2>
-                                 </div>
-                              </div>
-                              <div class="full progress_bar_inner">
-                                    <div class="col-md-12">
-                                       <div class="msg_list_main">
-                                          <ul class="msg_list">
-                                             <li>
-                                                <span>
-                                                <span class="name_user">Herman Beck</span>
-                                                <span class="msg_user">Sed ut perspiciatis unde omnis.</span>
-                                                <span class="time_ago">12 min ago</span>
-                                                </span>
-                                             </li>
-                                             <button class="btn btn-success" style="margin: 20px; float: right;">Daha Fazlasını gör</button>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
                           
                         </div>
                      <!-- graph -->
