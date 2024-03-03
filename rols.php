@@ -39,7 +39,7 @@
                   <tr>
                     <th  scope="row"><span><?= $row["rol_id"]; ?></span></th>
                     <td><span><?= $row["rol_name"]; ?></span></td>
-                    <td><button title="Düzenle" class="btn purple-button" style><i class="fa-solid fa-pen-to-square"></i></button> <button title="Sil" data-id="<?= $row["rol_id"]; ?>" name="sil" id="sil" class="btn btn-danger delete-button-rol"><i class="fa-solid fa-trash"></i></button></td>
+                    <td><button title="Düzenle" class="btn purple-button" name="rol_edit" data-id="<?= $row["rol_id"]; ?>" style><i class="fa-solid fa-pen-to-square"></i></button> <button title="Sil" data-id="<?= $row["rol_id"]; ?>" name="sil" id="sil" class="btn btn-danger delete-button-rol"><i class="fa-solid fa-trash"></i></button></td>
                   </tr>
                 <?php } ?>
               </tbody>

@@ -485,7 +485,7 @@ $("#object_add_form").submit(function (e) {
         getdata("cihaz_kategori"),
         getdata("cihaz_aciklama"),
         getdata("cihaz_durum"),
-        getdata("cihaz_ekleyen_kisi"),
+        getdata("cihaz_zimmet_kisi"),
     ]
     for(var i = 0; i < Object_Properties_Array.length; i++){
         if(Object_Properties_Array[i] == "" || Object_Properties_Array[i] == null){
@@ -574,7 +574,7 @@ $("button[name='review-object']").click(function (button_value_object) {
                 if(response.object_review_success){
                     var object_properties = response.object_review_success;
                     for (let index = 0; index < object_properties.length; index++) {
-                        if(object_properties[index]== null || object_properties[index] == ""){
+                        if(object_properties[index]== null || object_properties[index] == "" || object_properties[index] == undefined || object_properties[index] == "undefined"){
                             object_properties[index] = "Bilinmiyor!";
                         }
                     }
@@ -585,6 +585,7 @@ $("button[name='review-object']").click(function (button_value_object) {
                         <p style="font-size:14pt"><b>Cihaz Açıklama:</b> ${object_properties.esya_aciklama}</p>
                         <p style="font-size:14pt;color: red;"><b>Cihaz Durum:</b> ${object_properties.esya_durum_name}</p>
                         <p style="font-size:14pt; color:blue;"><b>Cihaz Ekleyen Kişi:</b> ${object_properties.esya_ekleyen_nickname}</p>
+                        <p style="font-size:14pt; color:black;"><b>Cihazın zimmetlendiği kişi:</b> ${object_properties.esya_ait_personel_isim_soyisim}</p>
                         <p style="font-size:14pt"><b>Cihaz Eklenme Tarihi:</b> ${formatDate(object_properties.esya_eklenme_tarih)}</p>
                     `,
                         showConfirmButton: true,
@@ -690,4 +691,109 @@ $("#user_add_form").submit(function (e) {
             }
         },
     });
+});
+$("button[name='category_edit']").click(async function(){
+    var category_edit_id = $(this).data("id");
+    const { value: text_category } = await Swal.fire({
+        icon: "warning",
+  title: "Yeni Kategori ismini giriniz",
+  input: "text",
+  showCancelButton: true,
+  cancelButtonText: "İptal",
+  confirmButtonText: "Kaydet",
+  inputValidator: (value) => {
+    if (!value) {
+      return "Kategori ismini değiştirmek için boş alanı doldurun!";
+    }
+  }
+});
+if(text_category){
+    $.ajax({
+        type: "POST",
+        url: "control/get.php",
+        data: {text_category , category_edit_id},
+        dataType: "JSON",
+        success: function (response) {
+            if(response.category_update_success){
+                success(response.category_update_success);
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+            if(response.category_update_error){
+                error(response.category_update_error);
+            }
+        }
+    });
+}
+});
+$("button[name='status_edit']").click(async function(){
+    var status_edit_id = $(this).data("id");
+    const { value: text_status } = await Swal.fire({
+    icon: "warning",
+  title: "Yeni Durum ismini giriniz",
+  input: "text",
+  showCancelButton: true,
+  cancelButtonText: "İptal",
+  confirmButtonText: "Kaydet",
+  inputValidator: (value) => {
+    if (!value) {
+      return "Durum ismini değiştirmek için boş alanı doldurun!";
+    }
+  },
+
+})
+if(text_status){
+    $.ajax({
+        type: "POST",
+        url: "control/get.php",
+        data: {text_status , status_edit_id},
+        dataType: "JSON",
+        success: function (response) {
+            if(response.status_update_success){
+                success(response.status_update_success);
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+            if(response.status_update_error){
+                error(response.status_update_error);
+            }
+        }
+    });
+}});
+$("button[name='rol_edit']").click(async function(){
+    var rol_edit_id = $(this).data("id");
+    const { value: text_rol } = await Swal.fire({
+        icon: "warning",
+    title: "Yeni Rol ismini giriniz",
+    input: "text",
+    showCancelButton: true,
+    cancelButtonText: "İptal",
+    confirmButtonText: "Kaydet",
+    inputValidator: (value) => {
+        if (!value) {
+        return "Rol ismini değiştirmek için boş alanı doldurun!";
+        }
+    },
+    })
+    if(text_rol){
+        $.ajax({
+            type: "POST",
+            url: "control/get.php",
+            data: {text_rol , rol_edit_id},
+            dataType: "JSON",
+            success: function (response) {
+                if(response.rol_update_success){
+                    success(response.rol_update_success);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+                if(response.rol_update_error){
+                    error(response.rol_update_error);
+                }
+            }
+        });
+    }
 });

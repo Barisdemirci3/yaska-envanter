@@ -126,6 +126,11 @@ class DatabaseClass
             return 2; //Kullanıcı bulunamadı
         }
     }
+    /**
+     * Kullanıcıların bilgilerini veya countu döndürür
+     * @param int $SelectCountOrNot countu döndürmek istiyorsanız 1, kullanıcı bilgilerini döndürmek istiyorsanız 0
+     * @return int 1, 0 döner. 1 başarılı, 0 başarısız
+     */
     function GetPersonel($SelectCountOrNot)
     {
         $CreateQuery = $this->db->prepare("SELECT * FROM kullanicilar");
@@ -270,7 +275,7 @@ class DatabaseClass
         $CreateQuery = $this->db->prepare("SELECT * FROM kullanicilar WHERE kullanici_id = ? ");
         $CreateQuery->execute([$id]);
         if ($CreateQuery) {
-            $WriteQuery = $CreateQuery->fetchall(PDO::FETCH_ASSOC); //Başarılı
+            $WriteQuery = $CreateQuery->fetch(PDO::FETCH_ASSOC); //Başarılı
             return $WriteQuery;
         } else {
             return 0; //Başarısız
@@ -302,10 +307,10 @@ class DatabaseClass
         $WriteQuery = $CreateQuery->fetch(PDO::FETCH_ASSOC);
         return $WriteQuery;
     }
-    function AddObjectToDatabase($seri_no, $kategori, $aciklama, $durum, $ekleyen_kisi)
+    function AddObjectToDatabase($seri_no, $kategori, $aciklama, $durum, $ekleyen_kisi, $zimmet_kisi)
     {
-        $CreateQuery = $this->db->prepare("INSERT INTO esyalar SET esya_seri_no = ? , esya_kategori_id = ? , esya_aciklama = ?, esya_durumu = ? , esya_ekleyen_id = ? , esya_eklenme_tarih = ? ,  esya_fotograf= 0");
-        $CreateQuery->execute([$seri_no, $kategori, $aciklama, $durum, $ekleyen_kisi, date("Y-m-d H:i:s")]);
+        $CreateQuery = $this->db->prepare("INSERT INTO esyalar SET esya_seri_no = ? , esya_kategori_id = ? , esya_aciklama = ?, esya_durumu = ? , esya_ekleyen_id = ? , esya_eklenme_tarih = ? , esya_ait_personel_id = ? ,esya_fotograf= 0");
+        $CreateQuery->execute([$seri_no, $kategori, $aciklama, $durum, $ekleyen_kisi, date("Y-m-d H:i:s") , $zimmet_kisi]);
         if ($CreateQuery) {
             return 1; //Eklendi
         } else {
@@ -415,6 +420,63 @@ class DatabaseClass
             return 0; //Eklenmedi
         }
     }
+    /**
+     * Category idsini alıp veritabanındaki o idye sahip kategoriyi günceller
+     * @param $category_id Kategori IDsi alınır
+     * @param $cateogry_name Kategori ismi alınır
+     * @return int 1 veya 0 döner. 1 başarılı 0 başarısız
+     */
+    function UpdateCategory($category_id, $category_name){
+        if(intval($category_id) == 0){
+            return "Gelen veri int türünde değil!";
+        }
+        else{
+            $CreateQuery = $this->db->prepare("UPDATE kategoriler SET kategori_isim = ? WHERE kategori_id = ?");
+            $CreateQuery->execute([$category_name,$category_id]);
+            if($CreateQuery){
+                return 1; //Başarılı
+            }
+            else{
+                return 0; //Başarısız
+            }
+        }
+    }
+    /**
+     * Status idsini alıp veritabanındaki o idye sahip statusu günceller
+     * @param $status_id status IDsi alınır
+     * @param $statusname status ismi alınır
+     * @return int 1 veya 0 döner. 1 başarılı 0 başarısız
+     */
+    function UpdateStatus($status_id, $statusname){
+        if(intval($status_id) == 0){
+            return "Gelen veri int türünde değil!";
+        }
+        else{
+            $CreateQuery = $this->db->prepare("UPDATE durumlar SET durum_isim = ? WHERE durum_id = ?");
+            $CreateQuery->execute([$statusname,$status_id]);
+            if($CreateQuery){
+                return 1; //Başarılı
+            }
+            else{
+                return 0; //Başarısız
+            }
+        }   
+}
+function UpdateRol($rol_id, $rol_name){
+    if(intval($rol_id) == 0){
+        return "Gelen veri int türünde değil!";
+    }
+    else{
+        $CreateQuery = $this->db->prepare("UPDATE roller SET rol_name = ? WHERE rol_id = ?");
+        $CreateQuery->execute([$rol_name,$rol_id]);
+        if($CreateQuery){
+            return 1; //Başarılı
+        }
+        else{
+            return 0; //Başarısız
+        }
+    }
+}
 }
 
 

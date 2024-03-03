@@ -72,6 +72,7 @@ if (isset($_POST["login_nickname"])) {
         $sonuc["login_success"] = "Giriş Yapıldı!";
         $_SESSION["nick"] = $nickname;
         $_SESSION["sistem_k_rol"] = $status["sistem_k_rol"];
+        $_SESSION["sistem_k_id"] = $status["sistem_k_id"];
        
     } else if ($status == 2) {
         $sonuc["login_error_password"] = "Kullanıcı şifresi yanlış!";
@@ -223,7 +224,7 @@ if (isset($_POST["Object_Properties_Array"])) {
     else{
     $object_data = json_decode($_POST["Object_Properties_Array"]);
     if ($object_data != "") {
-        $object_add_status = $database_class->AddObjectToDatabase($object_data[0], $object_data[1], $object_data[2], $object_data[3], $object_data[4]);
+        $object_add_status = $database_class->AddObjectToDatabase($object_data[0], $object_data[1], $object_data[2], $object_data[3], $_SESSION["sistem_k_id"], $object_data[4]);
         if ($object_add_status == 1) {
             $sonuc["object_success_added"] = "Cihaz başarılı bir şekilde eklendi!";
         } else {
@@ -298,6 +299,8 @@ if (isset($_POST["button_value_object"])) {
             else{
                 $data["esya_ekleyen_nickname"] = "Kullanıcı bulunamadı!";
             }
+            $get_personel_nickname = $database_class->GetPersonelProperties($data["esya_ait_personel_id"]);
+            $data["esya_ait_personel_isim_soyisim"] =  CharUpper($get_personel_nickname["kullanici_isim"]). " " . CharUpper($get_personel_nickname["kullanici_soyisim"]);
             $sonuc["object_review_success"] = $data;
         } else {
             $sonuc["object_review_error"] = "Data bulunamadı!";
@@ -316,6 +319,53 @@ if(isset($_POST["button_delete_id"])){
         $sonuc["object_delete_success"] = "Cihaz başarılı bir şekilde silindi!";
     }else{
         $sonuc["object_delete_error"] = "Cihaz silinirken bir hata oluştu!";
+    }
+}
+}
+//Kategori Güncelleme
+if(isset($_POST["text_category"]) && isset($_POST["category_edit_id"])){
+    $text_category = post("text_category");
+    $category_edit_id = post("category_edit_id");
+    if((int)$text_category){
+        $sonuc["category_update_error"] = "Kategori ismi sadece rakamlardan oluşamaz!";
+    }else{
+    $update_category = $database_class->UpdateCategory($category_edit_id, $text_category);
+    if($update_category == 1){
+        $sonuc["category_update_success"] = "Kategori başarılı bir şekilde güncellendi!";
+    }
+    else{
+        $sonuc["category_update_error"] = "Kategori güncellenirken bir hata oluştu!";
+    }
+}
+}
+//Durum Güncelleme
+if(isset($_POST["status_edit_id"]) && isset($_POST["text_status"])){
+    $status_edit_id = post("status_edit_id");
+    $text_status = post("text_status");
+    if((int)$text_status){
+        $sonuc["status_update_error"] = "Durum ismi sadece rakamlardan oluşamaz!";
+    }else{
+    $update_status = $database_class->UpdateStatus($status_edit_id, $text_status);
+    if($update_status == 1){
+        $sonuc["status_update_success"] = "Durum başarılı bir şekilde güncellendi!";
+    }
+    else{
+        $sonuc["status_update_error"] = "Durum güncellenirken bir hata oluştu!";
+    }
+}
+}
+if(isset($_POST["text_rol"]) && isset($_POST["rol_edit_id"])){
+    $text_rol = post("text_rol");
+    $rol_edit_id = post("rol_edit_id");
+    if((int)$text_rol){
+        $sonuc["rol_update_error"] = "Rol ismi sadece rakamlardan oluşamaz!";
+    }else{
+    $update_rol = $database_class->UpdateRol($rol_edit_id, $text_rol);
+    if($update_rol == 1){
+        $sonuc["rol_update_success"] = "Rol başarılı bir şekilde güncellendi!";
+    }
+    else{
+        $sonuc["rol_update_error"] = "Rol güncellenirken bir hata oluştu!";
     }
 }
 }

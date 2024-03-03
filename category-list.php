@@ -39,7 +39,7 @@
                   <tr>
                     <th  scope="row"><?= $row["kategori_id"]; ?></th>
                     <td><?= $row["kategori_isim"]; ?></td>
-                    <td><button title="Düzenle" class="btn purple-button"  ><i class="fa-solid fa-pen-to-square"></i></button> <button data-id="<?= $row["kategori_id"] ?>" title="Sil" name="sil" id="sil" class="btn btn-danger delete-button"><i class="fa-solid fa-trash"></i></button></td>
+                    <td><button title="Düzenle" class="btn purple-button" name="category_edit" data-id="<?= $row["kategori_id"] ?>"><i class="fa-solid fa-pen-to-square"></i></button> <button data-id="<?= $row["kategori_id"] ?>" title="Sil" name="sil" id="sil" class="btn btn-danger delete-button"><i class="fa-solid fa-trash"></i></button></td>
                   </tr>
                 <?php } ?>
               </tbody>
