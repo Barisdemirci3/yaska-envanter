@@ -1,8 +1,13 @@
 function formatDate(dateString) {
     let date = new Date(dateString);
-    let options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    return date.toLocaleDateString('tr-TR', options).replace(/\./g, '-');
+    let options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    let formattedDate = date.toLocaleDateString('tr-TR', options);
+    return formattedDate;
 }
+
+// Örnek kullanım
+console.log(formatDate('2024-03-19T16:04:49')); // Örnek tarih dizesi
+
 function getdata(data) {
     return $("#"+data).val().trim();
   }
@@ -26,7 +31,7 @@ function error(string) {
 }
 function warning(string) {
     return Swal.fire({
-        icon: "warn",
+        icon: "warning",
         title: "Uyarı",
         text: string,
         confirmButtonText: "Tamam",
@@ -374,8 +379,7 @@ $("button[name='review']").click(function (e) {
             dataType: "JSON",
             success: function (response) {
                 if (response.reviewbasarili) {
-                    var personelOzellikleri = response.reviewbasarili[0];
-                    let formattedDate = formatDate(personelOzellikleri.kullanici_eklenme_tarihi);
+                    var personelOzellikleri = response.reviewbasarili;
                     Swal.fire({
                         title: 'Kullanıcı Bilgileri',
                         html: `
@@ -385,7 +389,7 @@ $("button[name='review']").click(function (e) {
                         <p style="font-size:14pt"><b>Mail sender şifre:</b> <span id="MailPassword">${personelOzellikleri.kullanici_mailsender_sifre}</span> <button name="copyButton" data-target="#MailPassword" title="Kopyala" class="btn btn-primary"><i class="fa-solid fa-clipboard"></i></button></p>
                         <p style="font-size:14pt"><b>Slack Mail:</b> <span id="SlackMail">${personelOzellikleri.kullanici_slack_mail}</span> <button name="copyButton" data-target="#SlackMail" title="Kopyala" class="btn btn-primary"><i class="fa-solid fa-clipboard"></i></button></p>
                         <p style="font-size:14pt"><b>Kullanıcı Rolü:</b> ${personelOzellikleri.kullanici_rol}</p>
-                        <p style="font-size:14pt"><b>Eklenme Tarihi:</b> ${formattedDate}</p>
+                        <p style="font-size:14pt"><b>Eklenme Tarihi:</b> ${formatDate(personelOzellikleri.kullanici_eklenme_tarihi)}</p>
                     `,
                         showConfirmButton: true,
                         confirmButtonText: "Tamam",
@@ -394,7 +398,6 @@ $("button[name='review']").click(function (e) {
                             $("button[name='copyButton']").click(function() {
                                 var targetId = $(this).data("target");
                                 var textToCopy = $(targetId).text();
-                                
                                 navigator.clipboard.writeText(textToCopy).then(() => {
                                     toastr.success("Metin başarılı bir şekilde kopyalandı! Kopyalanan Metin: "+"<b>"+textToCopy+"</b>" , "Başarılı!");
                                 }).catch(err => {
@@ -584,7 +587,7 @@ $("button[name='review-object']").click(function (button_value_object) {
                         <p style="font-size:14pt; color: green;"><b>Cihaz Kategori:</b> ${object_properties.esya_kategori_name}</p>
                         <p style="font-size:14pt"><b>Cihaz Açıklama:</b> ${object_properties.esya_aciklama}</p>
                         <p style="font-size:14pt;color: red;"><b>Cihaz Durum:</b> ${object_properties.esya_durum_name}</p>
-                        <p style="font-size:14pt; color:blue;"><b>Cihaz Ekleyen Kişi:</b> ${object_properties.esya_ekleyen_nickname}</p>
+                        <p style="font-size:14pt; color:blue;"><b>Cihaz Ekleyen Kişi:</b> ${object_properties.esya_ekleyen_name}</p>
                         <p style="font-size:14pt; color:black;"><b>Cihazın zimmetlendiği kişi:</b> ${object_properties.esya_ait_personel_isim_soyisim}</p>
                         <p style="font-size:14pt"><b>Cihaz Eklenme Tarihi:</b> ${formatDate(object_properties.esya_eklenme_tarih)}</p>
                     `,
@@ -723,6 +726,16 @@ if(text_category){
             if(response.category_update_error){
                 error(response.category_update_error);
             }
+            if(response.yetki_error){
+                json_parse =  JSON.parse(response.yetki_error);
+                Swal.fire({
+                    title: "Yetki Hatası",
+                    icon: "error",
+                    confirmButtonText: "Tamam",
+                    confirmButtonColor: "green", 
+                    html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                });
+            }
         }
     });
 }
@@ -759,10 +772,20 @@ if(text_status){
             if(response.status_update_error){
                 error(response.status_update_error);
             }
+            if(response.yetki_error){
+                json_parse =  JSON.parse(response.yetki_error);
+                Swal.fire({
+                    title: "Yetki Hatası",
+                    icon: "error",
+                    confirmButtonText: "Tamam",
+                    confirmButtonColor: "green", 
+                    html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                });
+            }
         }
     });
 }});
-$("button[name='rol_edit']").click(async function(){
+$("button[name='rol_edit']").click( async function(){
     var rol_edit_id = $(this).data("id");
     const { value: text_rol } = await Swal.fire({
         icon: "warning",
@@ -793,7 +816,113 @@ $("button[name='rol_edit']").click(async function(){
                 if(response.rol_update_error){
                     error(response.rol_update_error);
                 }
+                if(response.yetki_error){
+                    json_parse =  JSON.parse(response.yetki_error);
+                    Swal.fire({
+                        title: "Yetki Hatası",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green", 
+                        html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                    });
+                }
             }
         });
     }
+});
+
+$("#user_update_password").submit(() => { 
+    var user_id = $("input[name='user_id']").val().trim();
+    var user_password = getdata("user_password");
+    if(user_id == "" || user_password == ""){
+        error("Lütfen şifre alanını doldurunuz!");
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "control/get.php",
+            data: {user_id, user_password},
+            dataType: "JSON",
+            success: function (response) {
+                if(response.user_password_success){
+                    success(response.user_password_success);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+                if(response.user_password_error){
+                    error(response.user_password_error);
+                }
+                if(response.yetki_error){
+                    json_parse =  JSON.parse(response.yetki_error);
+                    Swal.fire({
+                        title: "Yetki Hatası",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                        confirmButtonColor: "green", 
+                        html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                    });
+                }
+            }
+        });
+    }
+});
+$("#user_update_form").submit(function (e) {
+    e.preventDefault();
+    var formDataUpdate = new FormData(this); // 'this' form elementini işaret eder
+    formDataUpdate.append('name', $("#name").val().trim());
+    formDataUpdate.append('surname', $("#surname").val().trim());
+    formDataUpdate.append('nickname', $("#nickname").val().trim());
+    formDataUpdate.append('rol', $("#rol").val().trim());
+    formDataUpdate.append('user_id', $("#user_id").val().trim());
+    var fileInput = $('#file')[0].files[0];
+    formDataUpdate.append('file', fileInput);
+
+    // Tüm alanları doldurulup doldurulmadığını kontrol et
+    var emptyInputs = Array.from(formDataUpdate.values()).some(val => val === "");
+    if (emptyInputs) {
+        error("Lütfen Tüm Alanları Doldurunuz!");
+        return false;
+    }
+    jQuery.ajax({
+        type: "POST",
+        url: "control/get.php",
+        data: formDataUpdate,
+        dataType: "JSON",
+        contentType: false, 
+        processData: false, 
+        success: function (response) {
+            if (response.user_update_success) {
+                success(response.user_update_success);
+                setTimeout(() => {
+                    window.location.href = 'system-user.php?';
+                }, 2000);   
+            }
+            if(response.user_update_error){
+                error(response.user_update_error);
+            }
+            if(response.image_error){
+                error(response.image_error);
+            }
+            if(response.updated_self){
+                warning(response.updated_self);
+                setTimeout(() => {
+                    window.location.href = location.href;
+                }, 5000);
+                
+            }
+            if(response.yetki_error){
+                json_parse = JSON.parse(response.yetki_error);
+                Swal.fire({
+                    title: "Yetki Hatası",
+                    icon: "error",
+                    confirmButtonText: "Tamam",
+                    confirmButtonColor: "green",
+                    html: `<b> Yetkiniz: <span style= "color: ${json_parse.color}"> ${json_parse.status} </span> olduğundan dolayı ${json_parse.aciklama}</b>`
+                });
+            }
+        },
+    });
+});
+$("#object_update_form").submit(() => {
+success("Başarılı!");
 });

@@ -48,7 +48,7 @@
                     <td><span style="background-color: #2874E1; padding: 5px; border-radius: 20px; color:white;"><?= $dataclass->SystemRole($row["sistem_k_rol"]) ?></span></td>
                     <td><span><?= $row["sistem_k_kimekledi"]; ?></span></td>
                     <td><span class="text-center"><?= DateFormater($row["sistem_k_kayittarihi"]);  ?></span></td>
-                    <td><span><button class="btn purple-button" title="Düzenle"><i class="fa-regular fa-pen-to-square"></i></button> <button title="Sil" class="btn btn-danger delete-system-user" data-id="<?= $row["sistem_k_id"]; ?>" ><i class="fa-solid fa-trash"></i></button></span></td>
+                    <td><span><a href="edit-system-user.php?id=<?= $row["sistem_k_id"];?>"><button class="btn purple-button" title="Düzenle"><i class="fa-regular fa-pen-to-square"></i></button></a> <button title="Sil" class="btn btn-danger delete-system-user" data-id="<?= $row["sistem_k_id"]; ?>" ><i class="fa-solid fa-trash"></i></button></span></td>
                   </tr>
                 <?php } ?>
               </tbody>

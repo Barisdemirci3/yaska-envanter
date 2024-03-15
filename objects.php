@@ -25,6 +25,7 @@
                 </div>
               </div>
             </div>
+           <a href="control/get.php?downloadExcel=yes"><button class="btn btn-success"><i class="fa-solid fa-file-excel"></i> CİHAZLARIN EXCEL RAPORUNU İNDİR</button></a> 
             <table style="background-color: white;" class="table" id="table">
               <thead>
                 <tr>
@@ -40,7 +41,7 @@
                     <th  scope="row"><?= $row["esya_id"]; ?></th>
                     <td><span><?= $row["esya_seri_no"] ?></span></td>
                     <td><span><?= $row["esya_fotograf"]; ?></span></td>
-                    <td><span><button data-id="<?= $row["esya_id"]; ?>" name="review-object" title="İncele" class="btn purple-button" ><i class="fa-solid fa-magnifying-glass"></i></button> <button data-id="" name="edit-object" title="Düzenle" class="btn btn-primary" ><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button> <button class="btn" name="delete-object" data-id="<?= $row["esya_id"]; ?>" < style="background-color: #F31212" title="Sil"><i class="fa-solid fa-trash"></i></button></span></td>
+                    <td><span><button data-id="<?= $row["esya_id"]; ?>" name="review-object" title="İncele" class="btn purple-button" ><i class="fa-solid fa-magnifying-glass"></i></button> <a href="edit-object.php?id=<?= $row["esya_id"]; ?>"><button data-id="" name="edit-object" title="Düzenle" class="btn btn-primary" ><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button></a>  <button class="btn" name="delete-object" data-id="<?= $row["esya_id"]; ?>" < style="background-color: #F31212" title="Sil"><i class="fa-solid fa-trash"></i></button></span></td>
                   </tr>
                   <?php } ?>
               </tbody>

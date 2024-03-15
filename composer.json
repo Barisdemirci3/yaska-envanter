@@ -1,5 +1,6 @@
 {
     "require": {
-        "verot/class.upload.php": "^2.1"
+        "verot/class.upload.php": "^2.1",
+        "phpoffice/phpspreadsheet": "^2.0"
     }
 }
