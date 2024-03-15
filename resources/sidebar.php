@@ -1,7 +1,6 @@
 <?php 
 require_once("classes/include.php");
 $ClassVariable = new DatabaseClass;
-
 ob_start();
 session_start();
 if(!$_SESSION["nick"]){

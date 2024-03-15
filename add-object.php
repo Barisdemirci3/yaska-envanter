@@ -13,7 +13,7 @@
         $databaseclass = new DatabaseClass();
         $category_write = $databaseclass->GetCategory();
         $status_write = $databaseclass->CheckStatus(2);
-        $system_write = $databaseclass->CheckSistemKullanici("",0);
+        $system_write = $databaseclass->GetPersonel(0);
         ?>
         <!-- end topbar -->
         <!-- dashboard inner -->
@@ -71,12 +71,12 @@
                   <!-- Select Box -->
                   <div data-mdb-input-init class="form-outline mb-4">
                     <div data-mdb-input-init class="form-outline mb-4">
-                      <select name="cihaz_ekleyen_kisi" id="cihaz_ekleyen_kisi" class="form-control">
+                      <select name="cihaz_zimmet_kisi" id="cihaz_zimmet_kisi" class="form-control">
                       <?php foreach ($system_write as $row ) {
-                      echo '<option value='.$row["sistem_k_id"].'>'.$row["sistem_k_kullaniciadi"].'</option>';
+                      echo '<option value='.$row["kullanici_id"].'>'.CharUpper($row["kullanici_isim"])." ".CharUpper($row["kullanici_soyisim"]).'</option>';
                     } ?>
                       </select>
-                      <label class="form-label" for="form6Example3">Cihazı Ekleyen Kişi - <code>Zorunlu</code></label>
+                      <label class="form-label" for="form6Example3">Cihazın Zimmetlendiği kişi - <code>Zorunlu</code></label>
                     </div>
                     <!-- File UP -->
                     <div data-mdb-input-init class="form-outline mb-4">

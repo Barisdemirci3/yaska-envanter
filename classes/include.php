@@ -1,7 +1,12 @@
 <?php
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 session_start();
 if (!isset($_POST) || !isset($_GET)) {
-    header("Location: ./index.php");
+    header("Location: ../index.php");
+}
+function Get($get){
+    return htmlspecialchars(trim($_GET[$get]));
 }
 function post($post)
 {
@@ -38,6 +43,11 @@ function RandomGenerateChar()
 }
 class DatabaseClass
 {
+ function DateFormater($date)
+{
+    $date = new DateTime($date);
+    return $date->format("d/m/Y H:i");
+}
     public $db;
 
     public function __construct()
@@ -126,6 +136,11 @@ class DatabaseClass
             return 2; //Kullanıcı bulunamadı
         }
     }
+    /**
+     * Kullanıcıların bilgilerini veya countu döndürür
+     * @param int $SelectCountOrNot countu döndürmek istiyorsanız 1, kullanıcı bilgilerini döndürmek istiyorsanız 0
+     * @return int 1, 0 döner. 1 başarılı, 0 başarısız
+     */
     function GetPersonel($SelectCountOrNot)
     {
         $CreateQuery = $this->db->prepare("SELECT * FROM kullanicilar");
@@ -270,7 +285,7 @@ class DatabaseClass
         $CreateQuery = $this->db->prepare("SELECT * FROM kullanicilar WHERE kullanici_id = ? ");
         $CreateQuery->execute([$id]);
         if ($CreateQuery) {
-            $WriteQuery = $CreateQuery->fetchall(PDO::FETCH_ASSOC); //Başarılı
+            $WriteQuery = $CreateQuery->fetch(PDO::FETCH_ASSOC); //Başarılı
             return $WriteQuery;
         } else {
             return 0; //Başarısız
@@ -302,10 +317,10 @@ class DatabaseClass
         $WriteQuery = $CreateQuery->fetch(PDO::FETCH_ASSOC);
         return $WriteQuery;
     }
-    function AddObjectToDatabase($seri_no, $kategori, $aciklama, $durum, $ekleyen_kisi)
+    function AddObjectToDatabase($seri_no, $kategori, $aciklama, $durum, $ekleyen_kisi, $zimmet_kisi)
     {
-        $CreateQuery = $this->db->prepare("INSERT INTO esyalar SET esya_seri_no = ? , esya_kategori_id = ? , esya_aciklama = ?, esya_durumu = ? , esya_ekleyen_id = ? , esya_eklenme_tarih = ? ,  esya_fotograf= 0");
-        $CreateQuery->execute([$seri_no, $kategori, $aciklama, $durum, $ekleyen_kisi, date("Y-m-d H:i:s")]);
+        $CreateQuery = $this->db->prepare("INSERT INTO esyalar SET esya_seri_no = ? , esya_kategori_id = ? , esya_aciklama = ?, esya_durumu = ? , esya_ekleyen_name = ? , esya_eklenme_tarih = ? , esya_ait_personel_id = ? ,esya_fotograf= 0");
+        $CreateQuery->execute([$seri_no, $kategori, $aciklama, $durum, $ekleyen_kisi, date("Y-m-d H:i:s") , $zimmet_kisi]);
         if ($CreateQuery) {
             return 1; //Eklendi
         } else {
@@ -415,8 +430,208 @@ class DatabaseClass
             return 0; //Eklenmedi
         }
     }
+    /**
+     * Category idsini alıp veritabanındaki o idye sahip kategoriyi günceller
+     * @param $category_id Kategori IDsi alınır
+     * @param $cateogry_name Kategori ismi alınır
+     * @return int 1 veya 0 döner. 1 başarılı 0 başarısız
+     */
+    function UpdateCategory($category_id, $category_name){
+        if(intval($category_id) == 0){
+            return "Gelen veri int türünde değil!";
+        }
+        else{
+            $CreateQuery = $this->db->prepare("UPDATE kategoriler SET kategori_isim = ? WHERE kategori_id = ?");
+            $CreateQuery->execute([$category_name,$category_id]);
+            if($CreateQuery){
+                return 1; //Başarılı
+            }
+            else{
+                return 0; //Başarısız
+            }
+        }
+    }
+    /**
+     * Status idsini alıp veritabanındaki o idye sahip statusu günceller
+     * @param $status_id status IDsi alınır
+     * @param $statusname status ismi alınır
+     * @return int 1 veya 0 döner. 1 başarılı 0 başarısız
+     */
+    function UpdateStatus($status_id, $statusname){
+        if(intval($status_id) == 0){
+            return "Gelen veri int türünde değil!";
+        }
+        else{
+            $CreateQuery = $this->db->prepare("UPDATE durumlar SET durum_isim = ? WHERE durum_id = ?");
+            $CreateQuery->execute([$statusname,$status_id]);
+            if($CreateQuery){
+                return 1; //Başarılı
+            }
+            else{
+                return 0; //Başarısız
+            }
+        }   
 }
-
+function UpdateRol($rol_id, $rol_name){
+    if(intval($rol_id) == 0){
+        return "Gelen veri int türünde değil!";
+    }
+    else{
+        $CreateQuery = $this->db->prepare("UPDATE roller SET rol_name = ? WHERE rol_id = ?");
+        $CreateQuery->execute([$rol_name,$rol_id]);
+        if($CreateQuery){
+            return 1; //Başarılı
+        }
+        else{
+            return 0; //Başarısız
+        }
+    }
+}
+function GetRoleFromID($role_id){
+    $CreateQuery = $this->db->prepare("SELECT rol_name FROM roller WHERE rol_id = ?");
+    $CreateQuery->execute([$role_id]);
+    if($CreateQuery){
+        $WriteQuery = $CreateQuery->fetch(PDO::FETCH_ASSOC);
+        return $WriteQuery;
+    }
+    else{
+        return "Rol Bulunamadı!";
+    }
+}
+/**
+ * 
+ * @param int $user_id Kullanıcı idsi
+ * @param string $user_password Kullanıcı şifresi
+ * @return int 1 veya 0 döner. 1 başarılı 0 başarısız
+ * 
+ */
+function UpdateSystemPassword($user_id , $user_password){
+    $createquery = $this->db->prepare("UPDATE sistem_kullanici SET sistem_k_sifre = ? WHERE sistem_k_id = ?");
+    $createquery->execute([$user_password , $user_id]);
+    if($createquery){
+        return 1; //Başarılı
+    }
+    else{
+        return 0; //Başarısız
+    }
+}
+/**
+ *  @param string $name Kullanıcı ismi
+ * @param string $surname Kullanıcı soyismi
+ * @param string $nickname Kullanıcı kullanıcı adı
+ * @param string $rol Kullanıcı rolü
+ * @param int $user_id Kullanıcı idsi
+ * @param string $fotograf Kullanıcı fotoğrafı
+ * @param int $durum Kullanıcı fotoğrafı var mı yok mu?
+ * @return int 1 veya 0 döner. 1 başarılı 0 başarısız
+ */
+function UpdateSystemUserProperties($name, $surname, $nickname , $rol , $user_id, $fotograf, $durum){
+    if($durum == 0){
+        $createquery = $this->db->prepare("UPDATE sistem_kullanici SET sistem_k_isim = ? , sistem_k_soyisim = ? , sistem_k_kullaniciadi = ? , sistem_k_rol = ? WHERE sistem_k_id = ?");
+        $createquery->execute([$name, $surname, $nickname, $rol, $user_id]);
+        if($createquery){
+            return 1; //Başarılı
+        }
+        else{
+            return 0; //Başarısız
+        }
+    }
+    else{
+        $createquery = $this->db->prepare("UPDATE sistem_kullanici SET sistem_k_isim = ? , sistem_k_soyisim = ? , sistem_k_kullaniciadi = ? , sistem_k_rol = ? , sistem_k_profil = ? WHERE sistem_k_id = ?");
+        $createquery->execute([$name, $surname, $nickname, $rol, $fotograf, $user_id]);
+        if($createquery){
+            return 1; //Başarılı
+        }
+        else{
+            return 0; //Başarısız
+        }
+    }
+    
+}
+function DownloadExcel(){
+    $phpspreadsheet = new Spreadsheet();
+$sheet = $phpspreadsheet->getActiveSheet();
+$sayac = 2;
+$GetObjectsData = $this->GetObjects(0, 0);
+$styleArray = [
+    'font' => [
+        'bold' => true,
+        'color' => ['rgb' => '#000000'],
+        'size' => 16,
+        'name' => 'Arial'
+    ],
+    'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        'startColor' => ['rgb' => 'FFFFFF00'],
+        'endColor' => ['rgb' => 'FFFFFF00']
+    ],
+];
+$sheet->getStyle('A')->getFont()->setBold(true);
+$sheet->getStyle('A')->getFont()->setSize(18);
+$sheet->getStyle('A')->getFont()->setName('Arial');
+$sheet->getStyle('B')->getFont()->setBold(true);
+$sheet->getStyle('B')->getFont()->setSize(18);
+$sheet->getStyle('B')->getFont()->setName('Arial');
+$sheet->getStyle('C')->getFont()->setBold(true);
+$sheet->getStyle('C')->getFont()->setSize(18);
+$sheet->getStyle('C')->getFont()->setName('Arial');
+$sheet->getStyle('D')->getFont()->setBold(true);
+$sheet->getStyle('D')->getFont()->setSize(18);
+$sheet->getStyle('D')->getFont()->setName('Arial');
+$sheet->getStyle('E')->getFont()->setBold(true);
+$sheet->getStyle('E')->getFont()->setSize(18);
+$sheet->getStyle('E')->getFont()->setName('Arial');
+$sheet->getStyle('F')->getFont()->setBold(true);
+$sheet->getStyle('F')->getFont()->setSize(18);
+$sheet->getStyle('F')->getFont()->setName('Arial');
+$sheet->getStyle('G')->getFont()->setBold(true);
+$sheet->getStyle('G')->getFont()->setSize(18);
+$sheet->getStyle('H')->getFont()->setBold(true);
+$sheet->getStyle('H')->getFont()->setSize(18);
+$sheet->getColumnDimension('A')->setAutoSize(true);
+$sheet->getColumnDimension('B')->setAutoSize(true);
+$sheet->getColumnDimension('C')->setAutoSize(true);
+$sheet->getColumnDimension('D')->setAutoSize(true);
+$sheet->getColumnDimension('E')->setAutoSize(true);
+$sheet->getColumnDimension('F')->setAutoSize(true);
+$sheet->getColumnDimension('G')->setAutoSize(true);
+$sheet->getColumnDimension('H')->setAutoSize(true);
+$sheet->getStyle('A1')->applyFromArray($styleArray);
+$sheet->getStyle('B1')->applyFromArray($styleArray);
+$sheet->getStyle('C1')->applyFromArray($styleArray);
+$sheet->getStyle('D1')->applyFromArray($styleArray);
+$sheet->getStyle('E1')->applyFromArray($styleArray);
+$sheet->getStyle('F1')->applyFromArray($styleArray);
+$sheet->getStyle('G1')->applyFromArray($styleArray);
+$sheet->getStyle('H1')->applyFromArray($styleArray);
+foreach ($GetObjectsData as $key) {
+    $sheet->setCellValue("A1", "ID");
+    $sheet->setCellValue("B1", "Seri No");
+    $sheet->setCellValue("C1", "Kategori ID");
+    $sheet->setCellValue("D1", "Açıklama");
+    $sheet->setCellValue("E1", "Durum");
+    $sheet->setCellValue("F1", "Ait Personel ID");
+    $sheet->setCellValue("G1", "Eşyayı Ekleyen Kişi");
+    $sheet->setCellValue("H1", "Eklenme Tarihi");
+    $sheet->setCellValue("A" . $sayac, $key["esya_id"]);
+    $sheet->setCellValue("B" . $sayac, $key["esya_seri_no"]);
+    $sheet->setCellValue("C" . $sayac, $key["esya_kategori_id"]);
+    $sheet->setCellValue("D" . $sayac, $key["esya_aciklama"]);
+    $sheet->setCellValue("E" . $sayac, $key["esya_durumu"]);
+    $sheet->setCellValue("F" . $sayac, $key["esya_ait_personel_id"]);
+    $sheet->setCellValue("G" . $sayac, $key["esya_ekleyen_name"]);
+    $sheet->setCellValue("H" . $sayac, $this->DateFormater($key["esya_eklenme_tarih"]));
+    $sayac++;
+}
+$writer = new Xlsx($phpspreadsheet);
+$fileName = "esya_listesi.xlsx";
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+ob_end_clean();
+return $writer->save('php://output'); 
+exit();
+}
+}
 
 class DashboardClass extends DatabaseClass
 {
