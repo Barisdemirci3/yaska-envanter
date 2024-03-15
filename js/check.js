@@ -924,5 +924,5 @@ $("#user_update_form").submit(function (e) {
     });
 });
 $("#object_update_form").submit(() => {
-success("Başarılı!");
+success("Başarılı!sss");
 });
