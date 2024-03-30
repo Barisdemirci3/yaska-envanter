@@ -1,4 +1,5 @@
 <?php 
+date_default_timezone_set("Europe/Istanbul");
 require_once("classes/include.php");
 $ClassVariable = new DatabaseClass;
 ob_start();
@@ -47,6 +48,7 @@ $datas = $ClassVariable->GetUserProperties($_SESSION["nick"]);
                      <li><a href="rols.php"><i class="fa-solid fa-table" style="color: white;"></i><span>Rolleri Listele</span></a></li>
                      <li><a href="system-user.php"><i class="fa-solid fa-table" style="color: white;"></i> <span>Sistem kullanıcılarını listele</span></a></li>
                      <li><a href="users.php"><i class="fa-solid fa-table" style="color: white;"></i> <span>Personelleri listele</span></a></li>
+                     <li><a href="show-logs.php"><i class="fa-solid fa-table" style="color: white;"></i> <span>Logları görüntüle</span></a></li>
                   </ul>
                </div>
             </nav>

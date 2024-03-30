@@ -7,7 +7,9 @@ else{
   $databaseclass = new DatabaseClass();
   $write_object_data = $databaseclass->GetObjects(1,$id);
 }
-
+if(!$write_object_data){
+  header("Location: objects.php");
+}
 ?>
 
 <body class="inner_page map">
@@ -43,7 +45,7 @@ else{
               <div class="row mb-4">
                 <div class="col">
                   <div data-mdb-input-init class="form-outline">
-                    <input type="text" value="<?= $write_object_data["esya_seri_no"] ?>" id="cihaz_seri_no" placeholder="Cihaz Seri Numarası" class="form-control" />
+                    <input type="text" value="<?= $write_object_data["esya_seri_no"] ?>" name="cihaz_seri_no" id = "cihaz_seri_no" placeholder="Cihaz Seri Numarası" class="form-control" />
                     <label class="form-label" for="form6Example1">Cihaz Seri No - <code>Zorunlu</code></label>
                   </div>
                 </div>
@@ -68,7 +70,7 @@ else{
                 <div class="row mb-4">
                 <div class="col">
                   <div data-mdb-input-init class="form-outline">
-                    <textarea id="cihaz_aciklama" placeholder="Cihaz İçin Açıklama" class="form-control" ><?= $write_object_data["esya_aciklama"]; ?></textarea>
+                    <textarea id="cihaz_aciklama" name="cihaz_aciklama" placeholder="Cihaz İçin Açıklama" class="form-control" ><?= $write_object_data["esya_aciklama"]; ?></textarea>
                     <label class="form-label" for="form6Example1">Cihazın Açıklaması - <code>Zorunlu</code></label>
                   </div>
                 </div>
@@ -78,7 +80,7 @@ else{
                   <div data-mdb-input-init class="form-outline mb-4">
                     <select name="cihaz_durumu" id="cihaz_durum" class="form-control">
                     <?php foreach ($status_write as $row ) {
-                      if($status_write["durum_id"] == $write_object_data["esya_durum_id"]){
+                      if($status_write["durum_id"] == $write_object_data["esya_durumu"]){
                         echo '<option value='.$row["durum_id"].' selected>'.$row["durum_isim"].'</option>';
                       }
                       else{
@@ -103,12 +105,7 @@ else{
                       </select>
                       <label class="form-label" for="form6Example3">Cihazın Zimmetlendiği kişi - <code>Zorunlu</code></label>
                     </div>
-                    <!-- File UP -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                      <input type="text" id="mail_sender_sifre" placeholder="Mail Sender Şifre" class="form-control" />
-                      <label class="form-label" for="form6Example6">Cihazın var ise fotoğrafı - <code>Zorunlu Değil</code> </label>
-                    </div>
-                    <!-- File UP -->
+                    <input type="hidden" id="cihaz_id" value="<?= $id ?>">
                     <button type="submit" class="btn btn-success btn-block mb-4" style="padding: 15px;">Değişiklikleri Kaydet</button>
             </form>
             <!-- end row -->

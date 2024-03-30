@@ -978,6 +978,19 @@ a[data-toggle="collapse"] {
     /* Safari 4.0 - 8.0 */
     animation: online 2s infinite
 }
+.offline_animation {
+    width: 12px;
+    height: 12px;
+    background: #d70e0e;
+    border-radius: 100%;
+    margin-top: 0;
+    position: relative;
+    top: 1px;
+    
+    -webkit-animation: offline 2s infinite;
+    /* Safari 4.0 - 8.0 */
+    animation: offline 2s infinite
+}
 
 
 /* Safari 4.0 - 8.0 */
@@ -992,6 +1005,24 @@ a[data-toggle="collapse"] {
 }
 
 @keyframes online {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes offline {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes offline {
     from {
         opacity: 0;
     }

@@ -9,19 +9,19 @@
       <!-- right content -->
       <div id="content">
         <!-- topbar -->
-        <?php require_once("resources/topbar.php"); ?>
+        <?php require_once("resources/topbar.php"); 
+        $databaseclass = new DatabaseClass();
+        $writedata = $databaseclass->GetLogs();
+        ?>
         <!-- end topbar -->
         <!-- dashboard inner -->
-        <?php 
-          $dataclass = new DatabaseClass;
-          $GetUsers= $dataclass->GetPersonel(0);
-        ?>
+
         <div class="midde_cont">
           <div class="container-fluid">
             <div class="row column_title">
               <div class="col-md-12">
                 <div class="page_title">
-                  <h2>Personeller Listesi</h2>
+                  <h2>Log Listesi</h2>
                 </div>
               </div>
             </div>
@@ -29,23 +29,18 @@
               <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Personel Adı ve Soyadı</th>
-                  <th scope="col">İşlemler</th>
+                  <th scope="col">Log Metini</th>
+                  <th scope="col">Log oluşturulma tarihi</th>
                 </tr>
               </thead>
               <tbody>
-                <?php 
-                foreach($GetUsers as $row) {
-                ?>
+                <?php foreach ($writedata as $row) {?>
                   <tr>
-                    <th  scope="row"><?= $row["kullanici_id"] ?></th>
-                    <td><span><?= $row["kullanici_isim"]." ".$row["kullanici_soyisim"] ?></span></td>
-                    <td><span><button data-id="<?= $row["kullanici_id"]; ?>" name="review" title="İncele" class="btn purple-button"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <a href="edit-user.php?id=<?= $row["kullanici_id"] ?>"><button name="edit_personel" title="Düzenle" class="btn btn-primary"><i class="fa-regular fa-pen-to-square"></i></button></a>
-                    <button class="btn" name="delete-personel" data-id="<?= $row["kullanici_id"]; ?>" < style="background-color: #F31212" title="Sil"><i class="fa-solid fa-trash"></i></button></span></td>
-                    
+                    <th  scope="row"><?= $row["log_id"]; ?></th>
+                    <td><?= $row["log_metin"] ?></td>
+                    <td><?= $databaseclass->DateFormater($row["log_olusturulma_tarih"])?></td>
                   </tr>
-                <?php } ?>
+                  <?php } ?>
               </tbody>
             </table>
             <!-- end row -->

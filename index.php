@@ -108,40 +108,51 @@ $createDashboardClass = new DashboardClass;
                            </div>
                         </div>
                      </div>
-                     <div class="row margin_bottom_30">
-                        <div class="col-md-12 col-lg-6 widget_progress_section margin_bottom_30">
-                           <div class="white_shd full">
-                              <div class="widget_progress_bar">
-                                 <p class="progress_no">73%</p>
-                                 <p class="progress_head">Kullanılan laptop oranı</p>
-                                 <div class="progress_bar">
-                                    <!-- Skill Bars -->
-                                    <span class="skill">Bu oran kullanılan laptop oranını gösterir. Şuan kullanılan laptopların sayısı: <code>Null</code> . Sistemde kayıtlı olan laptop sayısı: <code>Null</code>  <br> <br></span>              
-                                    <div class="progress skill-bar ">
-                                       <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="73" aria-valuemin="0" aria-valuemax="100" style="width: 33%;"></div>
+                     <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>Last Comments</h2>
+                                 </div>
+                              </div>
+                              <div class="full progress_bar_inner">
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                       <div class="msg_list_main">
+                                          <ul class="msg_list">
+                                             <li>
+                                                <span>
+                                                <span class="name_user">Herman Beck</span>
+                                                <span class="msg_user">Sed ut perspiciatis unde omnis.</span>
+                                                <span class="time_ago">12 min ago</span>
+                                                </span>
+                                             </li>
+                                             <li>
+                                                <span>
+                                                <span class="name_user">John Smith</span>
+                                                <span class="msg_user">On the other hand, we denounce.</span>
+                                                <span class="time_ago">12 min ago</span>
+                                                </span>
+                                             </li>
+                                             <li>
+                                                <span>
+                                                <span class="name_user">John Smith</span>
+                                                <span class="msg_user">Sed ut perspiciatis unde omnis.</span>
+                                                <span class="time_ago">12 min ago</span>
+                                                </span>
+                                             </li>
+                                             <li>
+                                                <span>
+                                                <span class="name_user">John Smith</span>
+                                                <span class="msg_user">On the other hand, we denounce.</span>
+                                                <span class="time_ago">12 min ago</span>
+                                                </span>
+                                             </li>
+                                          </ul>
+                                       </div>
                                     </div>
                                  </div>
                               </div>
                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-6 widget_progress_section margin_bottom_30">
-                           <div class="white_shd full">
-                              <div class="widget_progress_bar">
-                                 <p class="progress_no">73%</p>
-                                 <p class="progress_head">Toplam taleplere verdiğiniz cevap oranı</p>
-                                 <div class="progress_bar">
-                                    <!-- Skill Bars -->
-                                    <span class="skill">Bu oran sistemde kayıtlı olan toplam taleplere verdiğiniz cevap oranını içermektedir. <br> <br> <br></span>                  
-                                    <div class="progress skill-bar ">
-                                       <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="73" aria-valuemin="0" aria-valuemax="100" style="width:40%;"></div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     <div class="col-md-12">
-                          
-                        </div>
                      <!-- graph -->
                      
                   <!-- footer -->
