@@ -413,7 +413,7 @@ $("button[name='review']").click(function (e) {
     }
 });
 
-$("button[name='delete-personel'").click(function (e) {
+$("button[name='delete-personel']").click(function (e) {
     var personel_id = parseInt($(this).attr("data-id"));
     if (personel_id == "" || personel_id == null) {
         console.error("ID is empty or null");

@@ -4,21 +4,24 @@ function RoleWrite($rolid)
   switch ($rolid) {
     case '0':
       return '<option value="0" selected>Görüntüleyici</option> <option value="1">Moderatör</option> <option value="2">Admin</option> ';
-      break;
+
     case '1':
       return '<option value="0">Görüntüleyici</option> <option value="1" selected>Moderatör</option> <option value="2">Admin</option> ';
-      break;
+
     case '2':
       return '<option value="0">Görüntüleyici</option> <option value="1">Moderatör</option> <option selected value="2">Admin</option>';
-      break;
+
   }
+
 };
 
 require_once("resources/header.php");
 if (!$_GET["id"]) {
   header("Location: system-user.php?id=nodata");
 } else {
-  $id = Get("id");
+  if(Get("id")){
+      $id = Get("id");
+  }
   if (empty($id)) {
     header("Location: system-user.php?id=empty");
   } else {
@@ -116,7 +119,7 @@ if (!$_GET["id"]) {
               <div class="row mb-4">
                 <div class="col">
                   <div data-mdb-input-init class="form-outline">
-                    <input type="password" id="user_password" placeholder="Şifre" class="form-control" />
+                    <input  type="password" id="user_password" placeholder="Şifre" class="form-control" />
                     <label class="form-label" for="form6Example1">Şifre - <code>Zorunlu</code></label>
                     <input type="hidden" name="user_id" value="<?= $id ?>">
               <button type="submit" class="btn btn-success btn-block mb-4" style="padding: 15px;">Şifreyi Değiştir</button>
@@ -137,5 +140,3 @@ if (!$_GET["id"]) {
   </div>
 
 </body>
-
-</html>

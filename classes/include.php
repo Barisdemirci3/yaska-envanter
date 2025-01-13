@@ -706,18 +706,18 @@ class CheckUserInterface extends DatabaseClass
             case 0:
                 $sonuc  = ["status" => "Görüntüleyici", "color" => "green", "aciklama" => "yalnızca görüntüleme yetkisine sahipsiniz bundan dolayı herhangi bir ekleme , düzenleme ve silme işlemi gerçekleştiremezsiniz." , "permission" => 0];
                 return json_encode($sonuc);
-                break;
+
             case 1:
                 $sonuc = ["status" => "Moderatör", "color" => "blue", "aciklama" => "Sistem Kullanıcılarında herhangi bir işlem yapma yetkiniz yok." , "permission" => 1];
                 return json_encode($sonuc);
-                break;
+
             case 2:
                 $sonuc = ["status" => "Moderatör", "color" => "blue", "aciklama" => "Admin Yetkiniz bulunmaktadır." , "permission" => 2];
                 return json_encode($sonuc);
-                break;
+
             default:
                 return 0;
-                break;
+
         }
     }
 }
